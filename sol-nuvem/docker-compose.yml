@@ -1,0 +1,34 @@
+version: '3'
+services:
+  db:
+    container_name: db-solnuvem
+    image: postgres
+    restart: always
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=root
+    ports:
+      - 5432:5432
+    networks:
+      - portapi
+
+  app:
+    build: .
+    container_name: nestjs-backend
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:root@db:5432/solnuvem
+    networks:
+      - portapi
+    command: sh -c "npx prisma generate && npx prisma migrate dev && npm run start"
+volumes:
+  pgdata:
+
+networks:
+  portapi:
+    driver: bridge

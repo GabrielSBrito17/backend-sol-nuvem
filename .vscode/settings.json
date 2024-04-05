@@ -1,4 +1,8 @@
 {
     "prettier.endOfLine": "auto",
-    "prettier.arrowParens": "always"
+    "prettier.arrowParens": "always",
+    "cSpell.words": [
+        "cliente",
+        "Creat"
+    ]
 }

@@ -1,14 +1,16 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { ClientService } from './client.service';
-import { CreateClientDto } from 'src/dto/create-client.dto';
-import { CreateUsersDto } from 'src/dto/create-users.dto';
+import { Body, Controller, Get, Post, Render } from '@nestjs/common';
+import { ClientService, ICreatClient } from './client.service';
+import { ICreatUserService } from 'src/users/users.service';
 
 @Controller('client')
 export class ClientController {
   constructor(private readonly clientService: ClientService) {}
 
+  @Get()
+  @Render('cliente')
+  root() {}
   @Post()
-  async creat(@Body() clientData: CreateClientDto): Promise<CreateUsersDto> {
+  async creat(@Body() clientData: ICreatClient): Promise<ICreatUserService> {
     return this.clientService.createClient(clientData);
   }
 }
