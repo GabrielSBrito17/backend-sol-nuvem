@@ -7,11 +7,10 @@ import * as bcrypt from 'bcrypt';
 export class ClientService {
   constructor(private prisma: PrismaService) {}
 
-  async createUser(createClientDto: CreateClientDto) {
+  async createClient(createClientDto: CreateClientDto) {
     const { name, lastname, address, cep, phone, email, password, whatsapp } =
       createClientDto;
     const hashedPassword = await bcrypt.hash(password, 10);
-    // Primeiro, criamos o cliente
     const client = await this.prisma.client.create({
       data: {
         name,
@@ -20,19 +19,18 @@ export class ClientService {
         cep,
         phone,
         email,
-        password: hashedPassword, // Certifique-se de que a senha esteja criptografada antes de salvá-la
+        password: hashedPassword,
         whatsapp,
       },
     });
 
-    // Em seguida, criamos o usuário associado ao cliente
     const user = await this.prisma.users.create({
       data: {
         email: client.email,
-        username: `${client.name} ${client.lastname}`, // Gera um username baseado no nome e sobrenome do cliente
+        username: `${client.name} ${client.lastname}`,
         password: hashedPassword,
-        type: 'client', // Define o tipo de usuário
-        clientId: client.id, // Associa o usuário ao cliente
+        type: 'client',
+        clientId: client.id,
       },
     });
 

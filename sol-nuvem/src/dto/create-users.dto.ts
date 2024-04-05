@@ -3,4 +3,5 @@ export class CreateUsersDto {
   username: string;
   password: string;
   type: string;
+  clientId: number;
 }

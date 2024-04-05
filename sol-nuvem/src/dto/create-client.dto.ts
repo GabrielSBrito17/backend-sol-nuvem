@@ -8,4 +8,5 @@ export class CreateClientDto {
   username: string;
   password: string;
   whatsapp?: boolean;
+  clientId?: any;
 }
