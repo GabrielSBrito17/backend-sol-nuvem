@@ -1,6 +1,9 @@
 import { Body, Controller, Get, Post, Render } from '@nestjs/common';
-import { ClientService, ICreatClient } from './client.service';
-import { ICreatUserService } from 'src/users/users.service';
+import {
+  ClientService,
+  ICreatClient,
+  IcreateClientResponse,
+} from './client.service';
 
 @Controller('client')
 export class ClientController {
@@ -10,7 +13,9 @@ export class ClientController {
   @Render('cliente')
   root() {}
   @Post()
-  async creat(@Body() clientData: ICreatClient): Promise<ICreatUserService> {
+  async creat(
+    @Body() clientData: ICreatClient,
+  ): Promise<IcreateClientResponse> {
     return this.clientService.createClient(clientData);
   }
 }

@@ -22,7 +22,7 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgresql://postgres:root@db:5432/solnuvem
+      - DATABASE_URL=postgres://solnuvem:RHxsbQago8iC59k99nkYW0G2z6m1Jasi@dpg-coa674n79t8c73ed8440-a.oregon-postgres.render.com/dbsolnuvem
     networks:
       - portapi
     command: sh -c "npx prisma generate && npx prisma migrate dev && npm run start"

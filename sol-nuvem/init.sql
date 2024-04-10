@@ -1,1 +1,1 @@
-CREATE DATABASE solnuvem;
+CREATE DATABASE dbsolnuvem;

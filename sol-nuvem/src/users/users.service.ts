@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { UserRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
+import { UserSchema } from './user.schemas';
+import { Errors } from 'src/utils/Errors';
+import { Success } from 'src/utils/Success';
 
 export interface ICreatUserService {
   email: string;
@@ -10,21 +13,34 @@ export interface ICreatUserService {
   clientId?: number;
 }
 
+export interface ICreatUserResponse {
+  status: number;
+  message: string;
+}
+
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private userRepository: UserRepository) {}
 
-  async createUser(createUsersDto: ICreatUserService) {
+  async createUser(
+    createUsersDto: ICreatUserService,
+  ): Promise<ICreatUserResponse> {
+    try {
+      await UserSchema.validate(createUsersDto);
+    } catch (error) {
+      return Errors.generic.validationError(error);
+    }
+
     const { email, username, password, type, clientId } = createUsersDto;
     const hashedPassword = await bcrypt.hash(password, 10);
-    return this.prisma.users.create({
-      data: {
-        email,
-        username,
-        password: hashedPassword,
-        type,
-        clientId,
-      },
-    });
+    const data = {
+      email,
+      username,
+      password: hashedPassword,
+      type,
+      clientId,
+    };
+    await this.userRepository.createUser(data);
+    return Success.generic.userCreateSuccess();
   }
 }
